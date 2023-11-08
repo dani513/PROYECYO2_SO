@@ -17,6 +17,7 @@ Dependencias
 Para instalar las dependencias, ejecuta pip install -r requirements.txt.
 
 Uso
+
 Para iniciar el servidor del reproductor de música, ejecuta en una terminal python3 servidor.py y en otra terminal python3 cliente.py
 
 Desarrolladores 
