@@ -9,15 +9,15 @@ from io import StringIO
 
 def main():
     """
-    Función principal que maneja la interacción con el usuario y la comunicación con el servidor.
+    Función principal que maneja la interaccion con el usuario y la comunicacion con el servidor.
 
-    Conecta el cliente al servidor, muestra un menú al usuario y procesa su selección. 
-    Las opciones incluyen agregar una canción,mostrar la lista de reproducción y salir del programa. 
+    Conecta el cliente al servidor, muestra un menu al usuario y procesa su seleccion. 
+    Las opciones incluyen agregar una cancion,mostrar la lista de reproduccion y salir del programa. 
 
-    La comunicación con el servidor se realiza a través de un socket.
+    La comunicacion con el servidor se realiza a traves de un socket.
     """
-    client_socket = socket(AF_INET, SOCK_STREAM)  # Creación de un objeto socket
-    client_socket.connect(('localhost', 12345))  # conexión al servidor en localhost en el puerto 12345
+    client_socket = socket(AF_INET, SOCK_STREAM)  # Creacion de un objeto socket
+    client_socket.connect(('localhost', 12345))  # conexion al servidor en localhost en el puerto 12345
     
     while True:
         os.system('clear')
@@ -26,31 +26,31 @@ def main():
         print("[2]--> Mostrar lista de reproduccion")
         print("[3]--> Salir")
         
-        opcion = input("Seleccione una opción: ")
+        opcion = input("Seleccione una opcion: ")
         
         if opcion == "1":
-            # Se solicita al usuario que introduzca los atributos de la canción
-            titulo = input("Titulo de la canción: ")
+            # Se solicita al usuario que introduzca los atributos de la cancion
+            titulo = input("Titulo de la cancion: ")
             interprete = input("Interprete: ")
             album = input("Album: ")
             usuario = input("Usuario que agrego: ")
             duracion = input("Duracion: ")
             
-            #se crea un diccionario con los atributos de la canción
+            #se crea un diccionario con los atributos de la cancion
             cancion = {"titulo": titulo, "interprete": interprete, "album": album, "fecha": datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
                        "usuario":usuario, "duracion": duracion}
-            #Se crea una solicitud con la opción y los atributos de la canción
+            #Se crea una solicitud con la opción y los atributos de la cancion
             solicitud = f"1 {json.dumps(cancion)}"
-            client_socket.send(solicitud.encode())  #se envía la solicitud al servidor
+            client_socket.send(solicitud.encode())  #se envia la solicitud al servidor
             respuesta = client_socket.recv(1024).decode() 
             print(respuesta)
         
         elif opcion == "2":
             
-            solicitud = "2"  #se crea una solicitud con la opción
+            solicitud = "2"  #se crea una solicitud con la opcion
             client_socket.send(solicitud.encode())  #se envía la solicitud al servidor
             data_string = client_socket.recv(1024).decode()  #se recibe la respuesta del servidor
-            print("Lista de Reproducción:")
+            print("Lista de Reproduccion:")
             print(data_string)
             df = pd.read_csv(StringIO(data_string))
             print("\n2 ultimas canciones agregadas recientemente:")
@@ -61,11 +61,8 @@ def main():
             break  
         
         else:
-            print("Opción no válida. Por favor, elija una opción del menú.")
+            print("Opcion no valida. Por favor, elija una opcion del menu.")
             input("Presiona Enter para continuar...")
 
 if __name__ == "__main__":
-    """
-    Verifica si el script se está ejecutando como programa principal. Si es así, llama a la función main().
-    """
     main()
