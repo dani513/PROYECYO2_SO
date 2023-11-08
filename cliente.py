@@ -15,19 +15,19 @@ def main():
     while True:
         os.system('clear')
         print("\nMenu:")
-        print("[1]--> Agregar canción")
-        print("[2]--> Mostrar lista de reproducción")
+        print("[1]--> Agregar cancion")
+        print("[2]--> Mostrar lista de reproduccion")
         print("[3]--> Salir")
         
         opcion = input("Seleccione una opción: ")
         
         if opcion == "1":
-            titulo = input("Título de la canción: ")
-            interprete = input("Intérprete: ")
-            album = input("Álbum: ")
+            titulo = input("Titulo de la canción: ")
+            interprete = input("Interprete: ")
+            album = input("Album: ")
             #fecha = input("Fecha de agregación: ")
-            usuario = input("Usuario que agregó: ")
-            duracion = input("Duración: ")
+            usuario = input("Usuario que agrego: ")
+            duracion = input("Duracion: ")
             
             cancion = {"titulo": titulo, "interprete": interprete, "album": album, "fecha": datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
                        "usuario":usuario, "duracion": duracion}

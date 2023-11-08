@@ -7,7 +7,7 @@ from socket import socket, AF_INET, SOCK_STREAM
 import pickle
 import json
 
-# Clase para representar un reproductor de música con semáforos
+#clase para representar un reproductor de musica con semáforos
 class ReproductorMusica:
     def __init__(self):
         self.playlist = pd.DataFrame(columns=["Titulo", "Interprete", "Album", "Fecha", "Usuario", "Duracion"])
@@ -44,7 +44,8 @@ class ReproductorMusica:
         if not self.playlist[(self.playlist['Titulo'] == titulo) & (self.playlist['Interprete'] == interprete)].empty:
             print(f"La canción '{titulo}' de '{interprete}' ya está en la playlist.")
             time.sleep(3)
-            self.eliminar_bloqueo()
+            #self.eliminar_bloqueo()
+            self.semaforo.release()
             return
         
         #self.crear_bloqueo()        
@@ -72,7 +73,7 @@ class ReproductorMusica:
         self.cargar_playlist()
         return self.playlist()
         
-# Clase para representar el servidor
+#clase para representar el servidor
 class ServidorReproductor:
     def __init__(self, reproductor):
         self.reproductor = reproductor
@@ -115,7 +116,7 @@ class ServidorReproductor:
                 client_socket.send("Canción agregada exitosamente".encode())
         client_socket.close()
                 
-# Función para ejecutar el servidor
+#funcion para ejecutar el servidor
 def ejecutar_servidor():
     reproductor = ReproductorMusica()
     servidor = ServidorReproductor(reproductor)
