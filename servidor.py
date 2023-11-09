@@ -17,7 +17,8 @@ class ReproductorMusica:
         Inicializa el reproductor de musica.
         Crea un DataFrame vacio para la lista de reproduccion y establece el nombre del archivo para guardar y cargar la lista de reproduccion.
         """
-        self.playlist = pd.DataFrame(columns=["Titulo", "Interprete", "Album", "Fecha", "Usuario", "Duracion"])
+        self.playlist = pd.DataFrame(columns=["Titulo", "Interprete", "Album", 
+                                              "Fecha", "Usuario", "Duracion"])
         self.nombre_archivo = "playlist.csv"
         self.semaforo = threading.Semaphore()
         
@@ -34,7 +35,6 @@ class ReproductorMusica:
         
         print("Agregada exitosamente a la playlist")
 
-
     def agregar_cancion(self, titulo, interprete, album, fecha, usuario, duracion):
         """
         Agrega una cancion a la lista de reproduccion, asegurandose que no exista una 
@@ -43,8 +43,8 @@ class ReproductorMusica:
         self.semaforo.acquire()
         self.cargar_playlist()
 
-        if not self.playlist[(self.playlist['Titulo'] == titulo) & (self.playlist['Interprete'] == interprete)].empty:
-            print(f"La canción '{titulo}' de '{interprete}' ya está en la playlist.")
+        if not self.playlist[(self.playlist['Titulo']==titulo) & (self.playlist['Interprete']==interprete)].empty:
+            print(f"La canción '{titulo}' de '{interprete}' ya esta en la playlist.")
             time.sleep(3)
 
             self.semaforo.release()
@@ -56,18 +56,7 @@ class ReproductorMusica:
         time.sleep(5)
         self.guardar_playlist()
         self.semaforo.release()
-
         time.sleep(2)
-
-    def mostrar_playlist(self):
-        """Muestra la lista de reproduccion."""
-        self.cargar_playlist()
-        ultimas_canciones = self.playlist.tail(2)
-        print("\nLista de Reproducción:") 
-        print(self.playlist.to_string(index=False))
-        print("\nÚltimas dos canciones agregadas:")
-        print(ultimas_canciones.to_string(index=False))
-        time.sleep(10)
 
     def ver_playlist(self):
         """Retorna la lista de reproduccion."""
@@ -96,14 +85,14 @@ class ServidorReproductor:
         Crea un socket de servidor y espera conexiones de clientes.
         Cuando se establece una conexion, crea un nuevo hilo para atender al cliente.
         """
-        server_socket = socket(AF_INET, SOCK_STREAM)  #creacion de un objeto socket
-        server_socket.bind(('localhost', 12345))  #vincula el socket del servidor a la direccion localhost y al puerto 12345
+        server_socket = socket(AF_INET, SOCK_STREAM)  #creamos el objeto socket
+        server_socket.bind(('localhost', 12345))  #vinculacion del socket delservidor
         server_socket.listen(5)  #permite al servidor escuchar conexiones entrantes
         
         while True:
-            print("Esperando conexiones...")
+            print("Esperando conexion")
             (client_socket, client_address) = server_socket.accept()
-            print(f"Conexión establecida con {client_address}")
+            print(f"Conexion establecida con: {client_address}")
             client_thread = threading.Thread(target=self.atender_cliente, args=(client_socket,))
             client_thread.start()
 
@@ -123,7 +112,6 @@ class ServidorReproductor:
             if solicitud == "2":  #solicitud de mostrar la lista
                 playlist = pd.read_csv("playlist.csv")
                 resp = playlist.to_string(index=False)
-                
                 client_socket.send(resp.encode())
                 
             elif solicitud == "3":  #solicitud de salir
@@ -132,8 +120,8 @@ class ServidorReproductor:
             elif solicitud.startswith('1'):  #solicitud para agregar una cancion
                 cancion = json.loads(solicitud.split(" ",1)[1])
                 self.reproductor.agregar_cancion(**cancion)
-                client_socket.send("Canción agregada exitosamente".encode())
-        client_socket.close()  #cierra la conexion con el cliente
+                client_socket.send("Cancion agregada exitosamente".encode())
+        client_socket.close()  #cierra la conexion con cliente
                 
 def ejecutar_servidor():
     """

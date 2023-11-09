@@ -29,28 +29,28 @@ def main():
         opcion = input("Seleccione una opcion: ")
         
         if opcion == "1":
-            # Se solicita al usuario que introduzca los atributos de la cancion
+            #lectura de atributos de la cancion
             titulo = input("Titulo de la cancion: ")
             interprete = input("Interprete: ")
             album = input("Album: ")
             usuario = input("Usuario que agrego: ")
             duracion = input("Duracion: ")
             
-            #se crea un diccionario con los atributos de la cancion
+            #se crea un diccionario con los datos  
             cancion = {"titulo": titulo, "interprete": interprete, "album": album, "fecha": datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
                        "usuario":usuario, "duracion": duracion}
-            #Se crea una solicitud con la opción y los atributos de la cancion
+            #Se crea la solicitud con los datos de la cancion
             solicitud = f"1 {json.dumps(cancion)}"
-            client_socket.send(solicitud.encode())  #se envia la solicitud al servidor
+            client_socket.send(solicitud.encode())  #envio de la solicitud 
             respuesta = client_socket.recv(1024).decode() 
             print(respuesta)
         
         elif opcion == "2":
             
-            solicitud = "2"  #se crea una solicitud con la opcion
-            client_socket.send(solicitud.encode())  #se envía la solicitud al servidor
-            data_string = client_socket.recv(1024).decode()  #se recibe la respuesta del servidor
-            print("Lista de Reproduccion:")
+            solicitud = "2" #solicitud
+            client_socket.send(solicitud.encode()) #send de la solicitud
+            data_string = client_socket.recv(1024).decode() #recv de la solicitud
+            print("\nLista de Reproduccion:")
             print(data_string)
             df = pd.read_csv(StringIO(data_string))
             print("\n2 ultimas canciones agregadas recientemente:")
